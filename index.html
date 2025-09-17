@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RegalIA – Encuentra el regalo perfecto</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; }
+    header { padding: 16px; text-align:center; background:#111827; }
+    h1 { margin:0; }
+    main { max-width:600px; margin:20px auto; padding:16px; }
+    .card { background:#1e293b; border-radius:12px; padding:16px; margin-bottom:16px; }
+    label { display:block; margin-bottom:4px; font-weight:600; }
+    select, input[type="checkbox"], button { margin-bottom:12px; }
+    button { padding:10px 16px; border:0; border-radius:8px; background:#22c55e; color:#052e16; font-weight:bold; cursor:pointer; }
+    .result { margin-bottom:12px; padding:12px; border-radius:8px; background:#0f172a; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎁 RegalIA</h1>
+    <p>Encuentra el regalo perfecto</p>
+  </header>
+  <main>
+    <div class="card">
+      <form id="quizForm">
+        <label>Relación</label>
+        <select id="relacion">
+          <option>pareja</option><option>amigo/a</option>
+          <option>familiar</option><option>compañero/a de trabajo</option>
+        </select>
+
+        <label>Edad</label>
+        <select id="edad">
+          <option>0-12</option><option>13-17</option><option>18-25</option>
+          <option>26-40</option><option>41-60</option><option>60+</option>
+        </select>
+
+        <label>Presupuesto</label>
+        <select id="presupuesto">
+          <option><25</option><option>25-50</option><option>50-100</option>
+          <option>100-200</option><option>200+</option>
+        </select>
+
+        <label>Ocasión</label>
+        <select id="ocasion">
+          <option>Navidad</option><option>cumpleaños</option>
+          <option>aniversario</option><option>solo porque sí</option>
+        </select>
+
+        <label>Intereses</label>
+        <input type="checkbox" value="tecnología">Tecnología<br>
+        <input type="checkbox" value="cocina">Cocina<br>
+        <input type="checkbox" value="música">Música<br>
+        <input type="checkbox" value="gaming">Gaming<br>
+
+        <label>Personalidad</label>
+        <input type="checkbox" value="práctico/a">Práctico/a<br>
+        <input type="checkbox" value="sentimental">Sentimental<br>
+        <input type="checkbox" value="creativo/a">Creativo/a<br>
+
+        <button type="submit">Ver regalos</button>
+      </form>
+    </div>
+    <div id="salida"></div>
+  </main>
+
+  <script>
+    const gifts = [
+      { title:"Audífonos Bluetooth", price:"25-60", tags:["tecnología","música"], personas:["práctico/a","geek"], occasions:["Navidad","cumpleaños"], edades:[13,60], relaciones:["amigo/a","pareja","familiar"] },
+      { title:"Set de especias gourmet", price:"20-45", tags:["cocina"], personas:["práctico/a","creativo/a"], occasions:["Navidad","cumpleaños"], edades:[18,80], relaciones:["amigo/a","pareja","familiar"] },
+      { title:"Juego de mesa moderno", price:"20-55", tags:["gaming","hogar"], personas:["creativo/a","aventurero/a"], occasions:["Navidad","cumpleaños"], edades:[10,80], relaciones:["familiar","amigo/a"] }
+    ];
+
+    document.getElementById('quizForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const ans = {
+        relacion: document.getElementById('relacion').value,
+        edad: document.getElementById('edad').value,
+        presupuesto: document.getElementById('presupuesto').value,
+        ocasion: document.getElementById('ocasion').value,
+        intereses: [...document.querySelectorAll('input[type=checkbox]:checked')].map(c=>c.value)
+      };
+      const out = document.getElementById('salida');
+      out.innerHTML = "";
+      gifts.forEach(g=>{
+        let puntos=0;
+        if(g.relaciones.includes(ans.relacion)) puntos+=2;
+        if(g.occasions.includes(ans.ocasion)) puntos+=2;
+        if(ans.intereses.some(i=>g.tags.includes(i))) puntos+=3;
+        const div=document.createElement('div');
+        div.className="result";
+        div.innerHTML=`<b>${g.title}</b> — ${g.price} USD<br><small>Puntos: ${puntos}</small>`;
+        out.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
